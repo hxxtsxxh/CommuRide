@@ -1,87 +1,90 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Button, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 
 const SignUpScreen = () => {
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [profilePicture, setProfilePicture] = useState(null);
 
   const handleSignUp = () => {
     // Your signup logic here
-    console.log('Signing up with username:', username, 'email:', email, 'phone number:', phoneNumber, 'password:', password);
-  };
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setProfilePicture(result.uri);
-    }
+    console.log('Full Name:', name, '\nphone number:', phoneNumber, '\nemail:', email, '\npassword:', password);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Create an Account</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Phone Number"
-          keyboardType="phone-pad"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableWithoutFeedback>
+    <ImageBackground source={{uri: 'https://wallpapers.com/images/high/city-iphone-qy4xod9kblj4fl0p.webp'}} blurRadius={0.7} resizeMode="cover" style={styles.background}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Create an Account</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Full Name"
+            placeholderTextColor={"#807877"}
+            value={name}
+            onChangeText={setName}
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Phone Number"
+            placeholderTextColor={"#807877"}
+            keyboardType="phone-pad"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor={"#807877"}
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor={"#635d5c"}
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'rgba(0,0,0,0.5)', // Add some opacity to make text readable
+    width: "100%",
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: "white",
   },
   input: {
     width: '80%',
     height: 50,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adjust opacity here
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 20,
@@ -89,8 +92,8 @@ const styles = StyleSheet.create({
   signUpButton: {
     width: '80%',
     height: 50,
-    backgroundColor: '#007bff',
-    borderRadius: 10,
+    backgroundColor: 'black',
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
