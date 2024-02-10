@@ -28,7 +28,7 @@ const StartingScreen = ({ navigation }) => {
                 <View style={{ height: "50%", width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => navigation.navigate('Log In')}>
                         <View>
-                            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 17 }}>Login</Text>
+                            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 17 }}>Log In</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => navigation.navigate('Sign Up')}>

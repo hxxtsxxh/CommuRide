@@ -1,16 +1,35 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback, ImageBackground } from 'react-native';
+import {auth} from "../firebase";
+import { doc, setDoc} from "firebase/firestore";
+import { db } from '../config';
 
-const SignUpScreen = () => {
+const SignUpScreen = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignUp = () => {
-    // Your signup logic here
-    console.log('Full Name:', name, '\nphone number:', phoneNumber, '\nemail:', email, '\npassword:', password);
-  };
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(async (userCredentials) => {
+        const user = userCredentials.user;
+        console.log('Registered with:', user.email);
+        await setDoc(doc(db, "users", user.uid), {
+          name: name,
+          email: email,
+          phoneNumber: phoneNumber,
+          uid: user.uid,
+        }).then(() => {
+          console.log('data submitted');
+        }).catch((error) => {
+          console.log(error);
+        });
+        navigation.replace("Home")
+      })
+      .catch(error => alert(error.message))
+  }
 
   return (
     <ImageBackground source={{uri: 'https://wallpapers.com/images/high/city-iphone-qy4xod9kblj4fl0p.webp'}} blurRadius={0.7} resizeMode="cover" style={styles.background}>
@@ -105,3 +124,8 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpScreen;
+
+// Once the user inputs their name, email, phone number, and password; we store them as variables
+// We then add the users name, email, and phone number into firebase alongside their unique identifier, which is also where the data is stored
+// This is very important as it can be used to access the data later on.
+// Once the data has been registered, the screen switches to the home screen

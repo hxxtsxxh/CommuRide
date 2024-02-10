@@ -1,65 +1,62 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/core'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { auth } from '../firebase';
 
-const LoginScreen = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phoneNumberError, setPhoneNumberError] = useState('');
+
+
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigation.replace("Home")
+      }
+    })
+
+    return unsubscribe
+  }, [])
 
   const handleLogin = () => {
-    let valid = true;
+    auth
+    .signInWithEmailAndPassword(email, password)
+    .then(userCredentials => {
+      const user = userCredentials.user;
+      console.log('Logged in with:', user.email);
 
-    if (!phoneNumber || phoneNumber.length !== 10 || !/^\d+$/.test(phoneNumber)) {
-      setPhoneNumberError('Phone number must be 10 digits and contain only numbers.');
-      valid = false;
-    } else {
-      setPhoneNumberError('');
-    }
-
-    if (valid) {
-      // Your login logic here
-      console.log('phone number:', phoneNumber, '\npassword:', password);
-    }
-  };
-
-  const clearError = (fieldName) => {
-    switch(fieldName) {
-      case 'phoneNumber':
-        setPhoneNumberError('');
-        break;
-      default:
-        break;
-    }
+    })
+    .catch(error => alert(error.message))
   };
 
   return (
     <ImageBackground source={{uri: 'https://wallpapers.com/images/high/city-iphone-qy4xod9kblj4fl0p.webp'}} blurRadius={0.7} resizeMode="cover" style={styles.background}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Welcome Back!</Text>
-        <TextInput
-          style={[styles.input, phoneNumberError ? styles.errorInput : null]}
-          placeholder="Phone Number"
-          placeholderTextColor={"#807877"}
-          keyboardType="phone-pad"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          onFocus={() => clearError('phoneNumber')}
-        />
-        {phoneNumberError ? <Text style={styles.error}>{phoneNumberError}</Text> : null}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Welcome Back!</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor={"#807877"}
+            value={email}
+            onChangeText={setEmail}
+          />
 
-        <TextInput
-          style={[styles.input, phoneNumberError ? styles.errorInput : null]}
-          placeholder="Password"
-          placeholderTextColor={"#807877"}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor={"#807877"}
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Log In</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   );
 };
@@ -108,14 +105,9 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold',
   },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-  },
-  errorInput: {
-    borderColor: 'red',
-    borderWidth: 1,
-  },
 });
 
 export default LoginScreen;
+
+// The user inputs their email and password which we then authenticate
+// if it exists we move to home screen else we alert them that something is wrong
