@@ -3,7 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import StartingScreen from './screens/StartingScreen';
 import LogInScreen from './screens/LogInScreen';
 import SignUpScreen from './screens/SignUpScreen';
-import HomeScreen from './screens/HomeScreen'
+import HomeScreen from './screens/tabScreens/HomeScreen'
+import SettingsScreen from './screens/tabScreens/SettingsScreen';
+import HistoryScreen from './screens/tabScreens/HistoryScreen';
+import GiveRideScreen from './screens/GiveRideScreen';
+import ShareRideScreen from './screens/ShareRideScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
@@ -23,7 +27,11 @@ export default function App() {
         <Stack.Screen name="Start Screen" component={StartingScreen} />
         <Stack.Screen name="Log In" component={LogInScreen} />
         <Stack.Screen name='Sign Up' component={SignUpScreen} />
-        <Stack.Screen name='Home' component={HomeScreen} />
+        <Stack.Screen name='Home' component={HomeScreen} options={{ gestureEnabled: false }}/>
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="History" component={HistoryScreen} />
+        <Stack.Screen name="Giving" component={GiveRideScreen} options={{ gestureEnabled: false }}/>
+        <Stack.Screen name="Sharing" component={ShareRideScreen} options={{ gestureEnabled: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
