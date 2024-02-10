@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import StartingScreen from './screens/StartingScreen';
 import LogInScreen from './screens/LogInScreen';
 import SignUpScreen from './screens/SignUpScreen';
-import HomeScreen from './screens/tabScreens/HomeScreen'
+import HomeScreen from './screens/tabScreens/HomeScreen';
 import SettingsScreen from './screens/tabScreens/SettingsScreen';
 import HistoryScreen from './screens/tabScreens/HistoryScreen';
 import GiveRideScreen from './screens/GiveRideScreen';
@@ -30,13 +30,9 @@ export default function App() {
         <Stack.Screen name='Home' component={HomeScreen} options={{ gestureEnabled: false }}/>
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="History" component={HistoryScreen} />
-        <Stack.Screen name="Giving" component={GiveRideScreen} options={{ gestureEnabled: false }}/>
-        <Stack.Screen name="Sharing" component={ShareRideScreen} options={{ gestureEnabled: false }}/>
+        <Stack.Screen name="Giving" component={GiveRideScreen} options={{ presentation: 'modal' }}/>
+        <Stack.Screen name="Sharing" component={ShareRideScreen} options={{ presentation: 'modal' }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-// First we create a stack and initialize all of the Screens in the app.
-// We also set the presentation style to card, which is just how the screen
-// is displayed and also how it transitions

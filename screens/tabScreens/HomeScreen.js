@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, BackHandler, StyleSheet, SafeAreaView, Platform, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, BackHandler, StyleSheet, SafeAreaView, Platform, TouchableOpacity, Animated } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { db } from '../../config';
@@ -16,10 +16,23 @@ const HomeScreen = ({ navigation }) => {
 
   const [userData, setUserData] = useState();
   const [userLocation, setUserLocation] = useState(null);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     fetchData();
     navigation.navigate("Dashboard");
+  }, []);
+
+  useEffect(() => {
+    // Fade in animation when component mounts
+    Animated.timing(
+      fadeAnim,
+      {
+        toValue: 1,
+        duration: 2000,
+        useNativeDriver: true,
+      }
+    ).start();
   }, []);
 
   // This fetches the data of the user who logs in or signs up.
@@ -95,7 +108,7 @@ const HomeScreen = ({ navigation }) => {
       >
         <Tab.Screen name="History" component={HistoryScreen} />
         <Tab.Screen name="Dashboard">
-          {() => <HomeContent userData={userData} navigation={navigation} />}
+          {() => <HomeContent userData={userData} navigation={navigation} fadeAnim={fadeAnim} />}
         </Tab.Screen>
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
@@ -103,7 +116,7 @@ const HomeScreen = ({ navigation }) => {
   );
 }
 
-const HomeContent = ({ userData, navigation }) => {
+const HomeContent = ({ userData, navigation, fadeAnim }) => {
   const handleGiveRide = () => {
     // Navigate to GiveRideScreen
     navigation.navigate('Giving');
@@ -115,22 +128,24 @@ const HomeContent = ({ userData, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <View style={styles.welcomeContainer}>
         {userData && (
-          <Text style={styles.welcomeText}>Welcome, {userData.name}</Text>
+          <Text style={styles.welcomeText}>Welcome {userData.name.trim().split(' ')[0]}!</Text>
         )}
       </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleGiveRide}>
-          <Text style={styles.buttonText}>Give</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleGetRide}>
-          <Text style={styles.buttonText}>Receive</Text>
-        </TouchableOpacity>
+      <View style= {styles.bodyContainer}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleGiveRide}>
+            <Text style={styles.buttonText}>Give a ride</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleGetRide}>
+            <Text style={styles.buttonText}>Receive a ride</Text>
+          </TouchableOpacity>
+        </View>
+        <QuoteCarousel />
       </View>
-       <QuoteCarousel />
-    </View>
+    </Animated.View>
   );
 }
 
@@ -143,9 +158,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  bodyContainer: {
+    marginTop: 300,
+    height: 700,
+    alignItems: "center",
+  },
   welcomeContainer: {
     position: 'absolute',
-    top: Platform.OS === 'ios' ? 70 : 20, // Adjusted for iOS notch
+    top: Platform.OS === 'ios' ? 70 : 40, // Adjusted for iOS notch
     left: 20,
   },
   welcomeText: {
@@ -155,13 +175,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    marginBottom: "20%",
+    marginBottom: "10%",
     gap: 30,
   },
   button: {
-    width: "40%",
-    height: "85%",
-    backgroundColor: '#351C5E', // Background color with reduced alpha (80% opacity)
+    width: "43%",
+    height: "80%",
+    backgroundColor: '#351C5E',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 30,
@@ -171,14 +191,13 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOpacity: 1,
     elevation: 10,
-    shadowRadius: 150 ,
+    shadowRadius: 150,
     shadowOffset : { width: 1, height: 13},
-
-},
-
+  },
   buttonText: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });
+

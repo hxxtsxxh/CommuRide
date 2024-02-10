@@ -1,7 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
+import { auth } from '../../firebase';
+import { useNavigation } from '@react-navigation/core'
+
 
 const Settings = () => {
+
+  const navigation = useNavigation()
+
   const options = [
     'Account',
     'Notifications',
@@ -11,24 +17,36 @@ const Settings = () => {
   ];
 
   const renderOption = ({ item }) => (
-    <TouchableOpacity style={styles.option}>
+    <TouchableOpacity
+      style={styles.option}
+      onPress={item === 'Sign Out' ? handleSignOut : null}
+    >
       <Text style={styles.optionText}>{item}</Text>
     </TouchableOpacity>
   );
 
-  return (
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Start Screen")
+      })
+      .catch(error => alert(error.message))
+  }
 
-      <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Settings</Text>
-        </View>
-        <FlatList
-          data={options}
-          renderItem={renderOption}
-          keyExtractor={(item, index) => index.toString()}
-          style={styles.listContainer}
-        />
-      </SafeAreaView>
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Settings</Text>
+      </View>
+      <FlatList
+        data={options}
+        renderItem={renderOption}
+        keyExtractor={(item, index) => index.toString()}
+        style={styles.listContainer}
+      />
+    </SafeAreaView>
   );
 };
 
@@ -36,7 +54,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
   header: {
     backgroundColor:"#0c023f",
     paddingVertical: 15,
