@@ -1,4 +1,4 @@
-When you first download the project, in your terminal, type `npx expo install`.
+When you first download the project, in your terminal, type `yarn install`. Then `npx expo install`.
 Then, type `npx expo start`.
 
 Names: Manish Chakka, Aneesh Karanam, Heet Shah, Keshav Kapur
