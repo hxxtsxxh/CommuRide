@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/core'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { auth } from '../firebase';
+
+/**
+ * LoginScreen component for user authentication.
+ * Allows users to log in using email and password.
+ * Redirects authenticated users to the Home screen.
+ *
+ * @param {object} navigation - React Navigation prop for navigating between screens.
+ * @returns {JSX.Element} - Rendered component for user login.
+ */
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -24,7 +32,6 @@ const LoginScreen = ({ navigation }) => {
     .signInWithEmailAndPassword(email, password)
     .then(userCredentials => {
       const user = userCredentials.user;
-      console.log('Logged in with:', user.email);
 
     })
     .catch(error => alert(error.message))

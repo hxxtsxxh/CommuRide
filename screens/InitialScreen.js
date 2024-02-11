@@ -1,31 +1,44 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Animated, Image } from 'react-native';
 
+/**
+ * InitialScreen component for displaying a rotating logo during app initialization.
+ * Navigates to 'Start Screen' after a brief animation loop.
+ *
+ * @param {object} navigation - React Navigation prop for navigating between screens.
+ * @returns {JSX.Element} - Rendered component with animated rotating logo.
+ */
+
 const InitialScreen = ({ navigation }) => {
+    // Initialize a rotation animation value
   const rotation = new Animated.Value(0);
 
   useEffect(() => {
+        // Create a rotation animation loop
     const rotationAnimation = Animated.loop(
       Animated.timing(rotation, {
         toValue: 1,
-        duration: 1500, // 3 seconds
+        duration: 1500, // 1.5 seconds for each rotation
         useNativeDriver: true,
       })
     );
 
+    // Start the rotation animation loop
     rotationAnimation.start();
 
-    // After 3 seconds, navigate to StartingScreen
+    // After 1.5 seconds, navigate to 'Start Screen'
     const timer = setTimeout(() => {
       navigation.replace('Start Screen');
     }, 1500);
 
+    // Clean up: stop the rotation animation and clear the timeout
     return () => {
       rotationAnimation.stop();
       clearTimeout(timer);
     };
   }, []);
 
+  // Map the rotation value to degrees for visual effect
   const rotateInterpolation = rotation.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],

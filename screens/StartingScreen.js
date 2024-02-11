@@ -3,6 +3,13 @@ import React from 'react';
 import { useFonts } from "expo-font";
 import { StatusBar } from 'expo-status-bar';
 
+/**
+ * StartingScreen component represents the initial screen of the CommuRide application.
+ * It includes a background image, the CommuRide title, and buttons for logging in or signing up.
+ *
+ * @param {Object} navigation - The navigation object used to navigate between screens.
+ */
+
 const StartingScreen = ({ navigation }) => {
     const title = "CommuRide";
     const image = { uri: 'https://wallpapers.com/images/high/city-iphone-qy4xod9kblj4fl0p.webp' };
@@ -43,7 +50,7 @@ const StartingScreen = ({ navigation }) => {
 }
 
 
-
+// Styles
 export default StartingScreen
 
 const styles = StyleSheet.create({

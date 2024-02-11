@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, BackHandler, StyleSheet, SafeAreaView, Platform, TouchableOpacity, Animated, Image } from 'react-native';
+import { View, Text, BackHandler, StyleSheet, Platform, TouchableOpacity, Animated, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { db } from '../../config';
@@ -14,25 +14,28 @@ const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({ navigation }) => {
 
-  const [userData, setUserData] = useState();
-  const [userLocation, setUserLocation] = useState(null);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  // Define state variables
+  const [userData, setUserData] = useState(); // State to hold user data
+  const [userLocation, setUserLocation] = useState(null); // State to hold user location
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Create a ref for fade animation
 
+  // Fetch data and navigate to Dashboard screen on initial render
   useEffect(() => {
-    fetchData();
-    navigation.navigate("Dashboard");
+    fetchData(); // Function to fetch user data and location
+    navigation.navigate("Dashboard"); // Navigate to Dashboard screen
   }, []);
 
+  // Perform fade-in animation when component mounts
   useEffect(() => {
-    // Fade in animation when component mounts
+    // Configure fade-in animation
     Animated.timing(
       fadeAnim,
       {
-        toValue: 1,
-        duration: 2000,
-        useNativeDriver: true,
+        toValue: 1, // Target opacity value
+        duration: 2000, // Duration of animation in milliseconds
+        useNativeDriver: true, // Use native driver for performance
       }
-    ).start();
+    ).start(); // Start the animation
   }, []);
 
   // This fetches the data of the user who logs in or signs up.
@@ -129,6 +132,7 @@ const HomeContent = ({ userData, navigation, fadeAnim }) => {
     navigation.navigate('Sharing');
   };
 
+  // imports custom made images to put on top of buttons in home
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <View style={styles.welcomeContainer}>
@@ -155,6 +159,7 @@ const HomeContent = ({ userData, navigation, fadeAnim }) => {
 
 export default HomeScreen;
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

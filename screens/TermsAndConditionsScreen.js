@@ -1,6 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+/**
+ * SignUpScreen component renders the sign-up screen content.
+ * It includes a container for various sign-up elements, and a section for displaying terms and conditions.
+ */
+
 const SignUpScreen = () => {
   return (
     <View style={styles.container}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList} from 'react-native';
 import { auth } from '../../firebase';
 import { useNavigation } from '@react-navigation/core'
 
@@ -13,7 +13,7 @@ const Settings = () => {
     'Notifications',
     'Privacy',
     'Help',
-    'Sign Out',
+    'Sign Out', // this button will be the only one that functions on this screen.
   ];
 
   const renderOption = ({ item }) => (
@@ -25,6 +25,7 @@ const Settings = () => {
     </TouchableOpacity>
   );
 
+  // will navigate to Start Screen once pressed.
   const handleSignOut = () => {
     auth
       .signOut()

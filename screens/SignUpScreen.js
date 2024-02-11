@@ -4,7 +4,16 @@ import { auth } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from '../config';
 
+/**
+ * Functional component for the sign-up screen.
+ *
+ * @param {object} navigation - The navigation object provided by React Navigation.
+ * @returns {JSX.Element} Sign-up screen JSX.
+ */
+
 const SignUpScreen = ({ navigation }) => {
+
+  // State variables for user input fields
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -15,22 +24,25 @@ const SignUpScreen = ({ navigation }) => {
       .createUserWithEmailAndPassword(email, password)
       .then(async (userCredentials) => {
         const user = userCredentials.user;
-        console.log('Registered with:', user.email);
+
+        // Store additional user details in Firestore
+
         await setDoc(doc(db, "users", user.uid), {
           name: name,
           email: email,
           phoneNumber: phoneNumber,
           uid: user.uid,
         }).then(() => {
-          console.log('data submitted');
         }).catch((error) => {
-          console.log(error);
         });
+
+        // Navigate to the "Home" screen
         navigation.replace("Home")
       })
       .catch(error => alert(error.message))
   }
 
+  // JSX structure for the sign-up screen
   return (
     <ImageBackground source={{ uri: 'https://wallpapers.com/images/high/city-iphone-qy4xod9kblj4fl0p.webp' }} blurRadius={0.7} resizeMode="cover" style={styles.background}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -94,7 +106,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)', // Add some opacity to make text readable
+    backgroundColor: 'rgba(0,0,0,0.5)',
     width: "100%",
   },
   title: {
@@ -106,7 +118,7 @@ const styles = StyleSheet.create({
   input: {
     width: '80%',
     height: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adjust opacity here
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 20,

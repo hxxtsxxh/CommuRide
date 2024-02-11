@@ -11,18 +11,17 @@ import {
   Alert
 } from "react-native";
 import {
-  GooglePlacesAutocomplete,
-  GooglePlaceDetail,
+  GooglePlacesAutocomplete
 } from "react-native-google-places-autocomplete";
 import { GOOGLE_API_KEY } from "../environments";
 import Constants from "expo-constants";
 import MapViewDirections from "react-native-maps-directions";
 import { auth } from "../firebase";
 import { db } from '../config';
-import { doc, setDoc, getDocs, query, where, collection } from "firebase/firestore";
+import { doc, setDoc} from "firebase/firestore";
+
 
 const { width, height } = Dimensions.get("window");
-
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
@@ -91,7 +90,6 @@ const GiveRideScreen= ({navigation}) => {
       radius: radius,
       uid: id,
     });
-    console.log("Ride Created");
     navigation.replace("Home") // TODO: MAKE THIS GO TO THE HOME PAGE
   };
 

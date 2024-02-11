@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import InitialScreen from './screens/InitialScreen'; // Import InitialScreen component
+import InitialScreen from './screens/InitialScreen';
 import StartingScreen from './screens/StartingScreen';
 import LogInScreen from './screens/LogInScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -10,10 +10,9 @@ import HistoryScreen from './screens/tabScreens/HistoryScreen';
 import GiveRideScreen from './screens/GiveRideScreen';
 import ShareRideScreen from './screens/ShareRideScreen';
 import ListScreen from './screens/ListScreen';
-import RideCard from './components/RideCard';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator(); // allows us to switch between screens.
 
 export default function App() {
   return (

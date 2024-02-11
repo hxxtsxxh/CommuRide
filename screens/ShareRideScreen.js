@@ -17,7 +17,7 @@ import {
 import { GOOGLE_API_KEY } from "../environments";
 import Constants from "expo-constants";
 import MapViewDirections from "react-native-maps-directions";
-import { doc, getDocs, query, collection, where, setDoc, getDoc } from "firebase/firestore";
+import { doc, getDocs, query, collection, setDoc, getDoc } from "firebase/firestore";
 import { db } from '../config';
 import { auth } from "../firebase";
 
@@ -57,6 +57,14 @@ const InputAutocomplete = ({ label, placeholder, onPlaceSelected }) => {
   );
 };
 
+/**
+ * ShareRideScreen component for sharing ride details, selecting origin and destination,
+ * and finding available rides.
+ *
+ * @param {object} navigation - React Navigation prop for navigating between screens.
+ * @returns {JSX.Element} - Rendered component for sharing ride details.
+ */
+
 const ShareRideScreen = ({navigation}) => {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
@@ -80,7 +88,6 @@ const ShareRideScreen = ({navigation}) => {
       passengers: passengers,
       uid: id,
     });
-    console.log("Ride Created");
     navigation.replace("List Screen") // TODO: MAKE THIS GO TO THE HOME PAGE
   };
 
@@ -137,11 +144,9 @@ const ShareRideScreen = ({navigation}) => {
         const fDestinationLat = fDestinationData.latitude;
         const fDestinationLon = fDestinationData.longitude;
 
-        if ((calculateDistance(originLat, originLon, fOriginLat, fOriginLon) <= radiusLimit) &&
+        if ((calculateDistance(originLat, originLon, fOriginLat, fOriginLon) <= parseInt(radiusLimit)) &&
             (calculateDistance(destinationLat, destinationLon, fDestinationLat, fDestinationLon) <= 20 )){
-              console.log("Ticket Created");
               listOfRideId.push(doc.data().uid);
-              console.log(listOfRideId);
         }
       });
     };
