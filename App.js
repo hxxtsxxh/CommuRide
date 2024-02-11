@@ -32,6 +32,7 @@ export default function App() {
         <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen name="Giving" component={GiveRideScreen} options={{ presentation: 'modal' }}/>
         <Stack.Screen name="Sharing" component={ShareRideScreen} options={{ presentation: 'modal' }}/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );

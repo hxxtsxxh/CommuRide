@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, BackHandler, StyleSheet, SafeAreaView, Platform, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, BackHandler, StyleSheet, SafeAreaView, Platform, TouchableOpacity, Animated, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { db } from '../../config';
@@ -137,9 +137,11 @@ const HomeContent = ({ userData, navigation, fadeAnim }) => {
       <View style= {styles.bodyContainer}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={handleGiveRide}>
+            <Image source={require('../../assets/images/driver.png')} style={styles.image} />
             <Text style={styles.buttonText}>Give a ride</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleGetRide}>
+            <Image source={require('../../assets/images/rider.png')} style={styles.image} />
             <Text style={styles.buttonText}>Receive a ride</Text>
           </TouchableOpacity>
         </View>
@@ -193,11 +195,19 @@ const styles = StyleSheet.create({
     elevation: 10,
     shadowRadius: 150,
     shadowOffset : { width: 1, height: 13},
+    position: 'relative', // To position the image relative to the button
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+    position: 'absolute',
+    bottom: 35, // Adjust the margin between the image and text
+  },
+  image: {
+    position: 'absolute', // Position the image absolute to overlay it on the button
+    top: 45, // Adjust the positioning of the image
+    width: 130, // Adjust the width of the image
+    height: 130, // Adjust the height of the image
   },
 });
-

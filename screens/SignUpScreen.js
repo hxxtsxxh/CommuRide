@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback, ImageBackground } from 'react-native';
-import {auth} from "../firebase";
-import { doc, setDoc} from "firebase/firestore";
+import { auth } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from '../config';
 
-const SignUpScreen = ({navigation}) => {
+const SignUpScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -32,7 +32,7 @@ const SignUpScreen = ({navigation}) => {
   }
 
   return (
-    <ImageBackground source={{uri: 'https://wallpapers.com/images/high/city-iphone-qy4xod9kblj4fl0p.webp'}} blurRadius={0.7} resizeMode="cover" style={styles.background}>
+    <ImageBackground source={{ uri: 'https://wallpapers.com/images/high/city-iphone-qy4xod9kblj4fl0p.webp' }} blurRadius={0.7} resizeMode="cover" style={styles.background}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <Text style={styles.title}>Create an Account</Text>
@@ -70,9 +70,12 @@ const SignUpScreen = ({navigation}) => {
             value={password}
             onChangeText={setPassword}
           />
+
           <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
+
+          <Text style={styles.termsText}>Terms and Conditions</Text>
         </View>
       </TouchableWithoutFeedback>
     </ImageBackground>
@@ -121,11 +124,11 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold',
   },
+  termsText: {
+    color: 'white',
+    marginTop: 10,
+    textDecorationLine: 'underline',
+  },
 });
 
 export default SignUpScreen;
-
-// Once the user inputs their name, email, phone number, and password; we store them as variables
-// We then add the users name, email, and phone number into firebase alongside their unique identifier, which is also where the data is stored
-// This is very important as it can be used to access the data later on.
-// Once the data has been registered, the screen switches to the home screen
