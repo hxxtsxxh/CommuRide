@@ -17,6 +17,9 @@ import {
 import { GOOGLE_API_KEY } from "../environments";
 import Constants from "expo-constants";
 import MapViewDirections from "react-native-maps-directions";
+import { doc, getDocs, query, collection, where, setDoc, getDoc } from "firebase/firestore";
+import { db } from '../config';
+import { auth } from "../firebase";
 
 const { width, height } = Dimensions.get("window");
 
@@ -54,7 +57,7 @@ const InputAutocomplete = ({ label, placeholder, onPlaceSelected }) => {
   );
 };
 
-const ShareRideScreen = () => {
+const ShareRideScreen = ({navigation}) => {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [showDirections, setShowDirections] = useState(false);
@@ -62,6 +65,86 @@ const ShareRideScreen = () => {
   const [duration, setDuration] = useState(0);
   const [passengers, setPassengers] = useState(''); // Default to 1 passenger
   const mapRef = useRef(null);
+
+
+  const CreateTicket = (origin, destination, passengers) => {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("User not authenticated");
+      return;
+    }
+    const id = user.uid;
+    setDoc(doc(db, "ride_tickets", id), {
+      origin: origin,
+      destination: destination,
+      passengers: passengers,
+      uid: id,
+    });
+    console.log("Ride Created");
+    navigation.replace("List Screen") // TODO: MAKE THIS GO TO THE HOME PAGE
+  };
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 3958.8; // Earth's radius in miles
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in miles
+    return distance;
+  };
+
+  const toRadians = (degrees) => {
+    return degrees * (Math.PI / 180);
+  };
+
+  const FindAllEligibleRides = async () => {
+    const listOfRideId = [];
+    const user = auth.currentUser;
+      if (!user) {
+        console.error("User not authenticated");
+        return;
+      }
+      const id = user.uid;
+
+      const originRef = doc(db, "ride_tickets", id);
+      const originSnapshot = await getDoc(originRef);
+      const originData = originSnapshot.data();
+      const originLat = originData.origin.latitude;
+      const originLon = originData.origin.longitude;
+
+
+      const destinationRef = doc(db, "ride_tickets", id);
+      const destinationSnapshot = await getDoc(destinationRef);
+      const destinationData = destinationSnapshot.data();
+      const destinationLat = destinationData.destination.latitude;
+      const destinationLon = destinationData.destination.longitude;
+
+      const q = query(collection(db, "avail_rides"));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+
+        const radiusLimit = doc.data().radius;
+
+        const fOriginData = doc.data().origin;
+        const fOriginLat = fOriginData.latitude;
+        const fOriginLon = fOriginData.longitude;
+
+        const fDestinationData = doc.data().destination;
+        const fDestinationLat = fDestinationData.latitude;
+        const fDestinationLon = fDestinationData.longitude;
+
+        if ((calculateDistance(originLat, originLon, fOriginLat, fOriginLon) <= radiusLimit) &&
+            (calculateDistance(destinationLat, destinationLon, fDestinationLat, fDestinationLon) <= 20 )){
+              console.log("Ticket Created");
+              listOfRideId.push(doc.data().uid);
+              console.log(listOfRideId);
+        }
+      });
+    };
 
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
@@ -82,7 +165,8 @@ const ShareRideScreen = () => {
 
   const traceRouteOnReady = (args) => {
     if (args) {
-      setDistance(args.distance);
+      const distanceInMiles = args.distance * 0.621371;
+      setDistance(distanceInMiles);
       setDuration(args.duration);
     }
   };
@@ -98,7 +182,10 @@ const ShareRideScreen = () => {
     } else {
       setPassengers(passengers)
     }
-    Keyboard.dismiss(); // Dismiss the keyboard
+    Keyboard.dismiss();
+    CreateTicket(origin, destination, passengers);
+    FindAllEligibleRides();
+    navigation.navigate("List Screen");
   };
 
   const onPlaceSelected = (details, flag) => {

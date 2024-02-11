@@ -89,9 +89,11 @@ const HomeScreen = ({ navigation }) => {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
+          tabBarLabelStyle: { color: 'black' },
+          tabBarStyle: { backgroundColor: 'rgba(133, 147, 93, 1)' },
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
-            let iconColor = focused ? '#0c023f' : color; // Set active color to #0c023f when focused
+            let iconColor = focused ? 'black' : 'black'; // Set active color to #0c023f when focused
 
             if (route.name === 'Dashboard') {
               iconName = focused ? 'home' : 'home-outline'; // Using Ionicons for home icon
@@ -156,7 +158,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#D7D1C4',
     justifyContent: 'center',
     alignItems: 'center',
   },

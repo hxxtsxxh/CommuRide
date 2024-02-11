@@ -3,8 +3,6 @@ import React from 'react';
 import { useFonts } from "expo-font";
 import { StatusBar } from 'expo-status-bar';
 
-
-
 const StartingScreen = ({ navigation }) => {
     const title = "CommuRide";
     const image = { uri: 'https://wallpapers.com/images/high/city-iphone-qy4xod9kblj4fl0p.webp' };

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE, Circle } from "react-native-maps"; // Import Circle
+import MapView, { Marker, PROVIDER_GOOGLE, Circle } from "react-native-maps";
 import {
   StyleSheet,
   View,
@@ -17,6 +17,9 @@ import {
 import { GOOGLE_API_KEY } from "../environments";
 import Constants from "expo-constants";
 import MapViewDirections from "react-native-maps-directions";
+import { auth } from "../firebase";
+import { db } from '../config';
+import { doc, setDoc, getDocs, query, where, collection } from "firebase/firestore";
 
 const { width, height } = Dimensions.get("window");
 
@@ -53,13 +56,13 @@ const InputAutocomplete = ({ label, placeholder, onPlaceSelected }) => {
   );
 };
 
-const ShareRideScreen = () => {
+const GiveRideScreen= ({navigation}) => {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [showDirections, setShowDirections] = useState(false);
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [seats, setSeats] = useState(''); // Default to 1 passenger
+  const [seats, setSeats] = useState('');
   const [radius, setRadius] = useState('');
   const mapRef = useRef(null);
 
@@ -72,9 +75,30 @@ const ShareRideScreen = () => {
     left: edgePaddingValue,
   };
 
+  const updateAvailableRides = (origin, destination, seats, radius) => {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("User not authenticated");
+      return;
+    }
+
+    const id = user.uid;
+
+    setDoc(doc(db, "avail_rides", id), {
+      origin: origin,
+      destination: destination,
+      seats: seats,
+      radius: radius,
+      uid: id,
+    });
+    console.log("Ride Created");
+    navigation.replace("Home") // TODO: MAKE THIS GO TO THE HOME PAGE
+  };
+
   const traceRouteOnReady = (args) => {
     if (args) {
-      setDistance(args.distance);
+      const distanceInMiles = args.distance * 0.621371;
+      setDistance(distanceInMiles);
       setDuration(args.duration);
     }
   };
@@ -98,6 +122,7 @@ const ShareRideScreen = () => {
     }
     setRadius(validatedRadius);
     Keyboard.dismiss(); // Dismiss the keyboard
+    updateAvailableRides(origin, destination, seats, radius);
   };
 
 
@@ -147,8 +172,8 @@ const ShareRideScreen = () => {
               center={origin}
               radius={parseFloat(radius) * 1609.34} // Convert miles to meters
               strokeWidth={2}
-              strokeColor="rgba(0,255,0,0.5)"
-              fillColor="rgba(0,255,0,0.3)"
+              strokeColor="rgba(255,0,0,0.5)"
+              fillColor="rgba(255,0,0,0.3)"
             />
           )}
         </MapView>
@@ -273,4 +298,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShareRideScreen;
+export default GiveRideScreen;

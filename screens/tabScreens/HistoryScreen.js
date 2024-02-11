@@ -36,17 +36,18 @@ const History = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#D7D1C4",
   },
 
   header: {
-    backgroundColor: "#0c023f",
+    backgroundColor: "rgba(133, 147, 93, 1)",
     paddingVertical: 15,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.3)',
   },
   headerText: {
-    color: 'white',
+    color: '#0c023f',
     fontSize: 24,
     fontWeight: 'bold',
   },
