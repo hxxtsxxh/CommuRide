@@ -1,4 +1,4 @@
-Run this by typing `git clone [https://github.com/hxxtsxxh/CommuRide.git]`. In your terminal, type `yarn install`. Then `npx expo install`.
+Run this by typing `git clone https://github.com/hxxtsxxh/CommuRide.git`. In your terminal, type `yarn install`. Then `npx expo install`.
 Then, type `npx expo start`.
 
 Names: Manish Chakka, Aneesh Karanam, Heet Shah, Keshav Kapur
