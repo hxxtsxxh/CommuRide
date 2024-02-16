@@ -5,6 +5,7 @@ import { db } from '../config';
 import { GOOGLE_API_KEY } from "../environments";
 import axios from 'axios';
 import Sms from 'react-native-sms';
+import { auth } from "../firebase";
 
 const RideCard = (props) => {
     const [from, setFrom] = useState("");

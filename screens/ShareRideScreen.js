@@ -329,4 +329,3 @@ const styles = StyleSheet.create({
 });
 
 export default ShareRideScreen;
-
