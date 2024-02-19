@@ -1,3 +1,5 @@
+*This will not work if you do not paste your own api keys in the respective fields.*
+
 Run this by typing `git clone https://github.com/hxxtsxxh/CommuRide.git`. In your terminal, type `yarn install`. Then `npx expo install`.
 Then, type `npx expo start`.
 
